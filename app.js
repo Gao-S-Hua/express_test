@@ -1,15 +1,18 @@
 // Dependencies:
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser');
-
+const logger = require('./middleware/logger');
+const port = 5000;
 // Instance App---------------
 const app = express();
+app.use( express.static( path.join(__dirname, 'public') ) );
+app.use( logger );
+app.use( express.json() );
+app.use( express.urlencoded( {extended : false} ) );
 
+// Routers:
+app.use('/api/members', require('./routes/api/member'));
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
-})
 
 // Listen
-app.listen(8000, () => console.log("Listening on port 8000!"))
+app.listen(port, () => console.log("Listening on port " + port))
